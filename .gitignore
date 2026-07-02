@@ -1,0 +1,42 @@
+# Dependencies
+node_modules/
+**/node_modules/
+venv/
+**/venv/
+
+# Build outputs
+build/
+**/build/
+dist/
+**/dist/
+
+# Python cache and temporary files
+__pycache__/
+**/__pycache__/
+*.pyc
+scratch/
+**/scratch/
+
+# IDEs and OS files
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Credentials & environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+**/.env
+**/.env.*
+!**/.env.example
+
+# Custom exclusions requested by the user
+Sample_bot/
+
+# Ignore all markdown files except README.md files
+**/*.md
+!**/README.md
+!README.md

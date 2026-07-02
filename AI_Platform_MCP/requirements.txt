@@ -1,0 +1,17 @@
+mcp>=1.28.0
+httpx>=0.24.0
+uvicorn>=0.20.0
+pydantic>=2.0.0
+google-auth>=2.0.0
+google-api-python-client>=2.0.0
+ddgs
+sqlalchemy
+cryptography
+sqlparse
+psycopg2-binary
+pymysql
+pymongo
+
+
+
+
