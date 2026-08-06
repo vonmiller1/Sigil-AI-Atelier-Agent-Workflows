@@ -1,12 +1,12 @@
-# 🚀 Yakkay AI Agent Platform: Technical Architecture & Feature Guide
+# 🚀 AI Agent Platform: Technical Architecture & Feature Guide
 
-Welcome to the **Yakkay AI Agent Platform** technical guide. This document provides an exhaustive, low-level architectural breakdown of the platform's systems, showcasing how it manages Model Context Protocol (MCP) servers, implements a high-fidelity Hybrid RAG pipeline, manages database connections, schedules intelligent LangGraph agent loops, and maintains a custom global layout theme/font engine.
+Welcome to the **AI Agent Platform** technical guide. This document provides an exhaustive, low-level architectural breakdown of the platform's systems, showcasing how it manages Model Context Protocol (MCP) servers, implements a high-fidelity Hybrid RAG pipeline, manages database connections, schedules intelligent LangGraph agent loops, and maintains a custom global layout theme/font engine.
 
 ---
 
 ## 🏗️ 1. Overall System Architecture
 
-The Yakkay AI Agent Platform is designed as a decoupled, multi-layer service mesh. It leverages a Node.js Express server to handle API routing, OAuth authentication, and metadata persistence, while delegating heavy computational tasks, database operations, and LLM orchestration to a Python FastAPI microservice.
+The  AI Agent Platform is designed as a decoupled, multi-layer service mesh. It leverages a Node.js Express server to handle API routing, OAuth authentication, and metadata persistence, while delegating heavy computational tasks, database operations, and LLM orchestration to a Python FastAPI microservice.
 
 Below is the workflow of the platform, from user request to tool execution:
 
@@ -63,12 +63,12 @@ The platform provides a highly flexible tool management layer that brings togeth
 ### The Standard MCP Protocol
 MCP is an open standard that decouples tools and resources from the LLM reasoning core. Normally, calling an MCP tool requires running an external process and sending JSON-RPC messages back and forth over `stdin`/`stdout` or HTTP SSE. While robust, this setup introduces network overhead, latency, and complex process lifecycle management.
 
-### The Yakkay Inline FastMCP Bridge
-To maximize execution speed while retaining the benefits of MCP's decoupled design, Yakkay implements a custom **inline FastMCP Bridge** (`ai_engine/app/tools/mcp_bridge.py`):
+### The  Inline FastMCP Bridge
+To maximize execution speed while retaining the benefits of MCP's decoupled design,  implements a custom **inline FastMCP Bridge** (`ai_engine/app/tools/mcp_bridge.py`):
 
 1. **Local Server Import & Registration**: The Python engine directly imports the FastMCP server object (`from AI_Platform_MCP.app import mcp`) and all tool files. This triggers the `@mcp.tool()` decorators, registering them directly in memory.
 2. **LangChain Tool Wrapping**: Rather than making network requests, `mcp_bridge.py` inspects the registered tools (`mcp._tool_manager.list_tools()`) and wraps them as LangChain `StructuredTool` objects. It retains their exact metadata schemas (`tool_info.fn_metadata.arg_model`) and descriptions so the LLM can generate parameters correctly.
-3. **Mock Request Context Injection**: This is the key detail. Many SaaS tools (like Gmail or Outlook) require OAuth tokens. Yakkay's bridge intercepts the user's `auth_vault` from the Express backend, extracts the appropriate access token (based on tool name prefixes, e.g., `gmail_` or `outlook_`), wraps them in a `MockContext`, and executes the tool manager directly:
+3. **Mock Request Context Injection**: This is the key detail. Many SaaS tools (like Gmail or Outlook) require OAuth tokens. 's bridge intercepts the user's `auth_vault` from the Express backend, extracts the appropriate access token (based on tool name prefixes, e.g., `gmail_` or `outlook_`), wraps them in a `MockContext`, and executes the tool manager directly:
    ```python
    # Excerpt from ai_engine/app/tools/mcp_bridge.py
    ctx = MockContext(meta_data={"x-google-oauth-token": token})
@@ -162,7 +162,7 @@ Database credentials are protected using two-way encryption:
 * **FastAPI Schema Cache**: To avoid querying the database for metadata on every turn, reflected schemas are stored in a memory cache. This schema is made available to the agent so it can write accurate queries.
 
 ### Security Gates & Guardrails
-Allowing an AI agent to execute arbitrary SQL is a security risk. Yakkay implements a strict security gate in `AI_Platform_MCP/tools/database/db_tools.py` via `validate_sql(query)`:
+Allowing an AI agent to execute arbitrary SQL is a security risk.  implements a strict security gate in `AI_Platform_MCP/tools/database/db_tools.py` via `validate_sql(query)`:
 * **Single Statement Verification**: The query is parsed using `sqlparse`. If it contains more than one SQL statement (e.g., separated by a semicolon), execution is blocked.
 * **Read-Only Enforcer**: The parser checks the query type. **Only `SELECT` statements are permitted.** Any operations attempting to modify data (such as `INSERT`, `UPDATE`, `DELETE`, `DROP`, or `ALTER`) throw a security exception.
 * **Row-Count Cap**: The system queries up to 51 rows. If more than 50 rows are returned, it truncates the result to 50 rows and sets a flag (`has_more = True`). This prevents excessive token usage from large database tables.
