@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { apiUrl } from '../config/apiBase';
 import { 
   Key, 
   Save, 
@@ -37,7 +38,7 @@ const ProviderKeys = () => {
 
     setFetching(true);
     try {
-      const response = await fetch('http://localhost:5000/api/connections', {
+      const response = await fetch(apiUrl('/api/connections'), {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -80,7 +81,7 @@ const ProviderKeys = () => {
     }
 
     try {
-      const response = await fetch(`http://localhost:5000/api/connections/${connection.id}/models`, {
+      const response = await fetch(apiUrl(`/api/connections/${connection.id}/models`), {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -125,7 +126,7 @@ const ProviderKeys = () => {
 
     try {
       const displayProviderName = providerName === 'Custom OpenAI-Compatible' ? customProviderName : providerName;
-      const response = await fetch('http://localhost:5000/api/connections', {
+      const response = await fetch(apiUrl('/api/connections'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
