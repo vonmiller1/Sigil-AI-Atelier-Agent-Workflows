@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { apiUrl } from '../config/apiBase';
 import { 
   Database, 
   BookOpen, 
@@ -57,7 +58,7 @@ const KnowledgeBase = () => {
       const token = localStorage.getItem('token');
       if (!token) throw new Error('Unauthenticated user.');
       
-      const response = await fetch('http://localhost:5000/api/databases', {
+      const response = await fetch(apiUrl('/api/databases'), {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       const data = await response.json();
@@ -83,7 +84,7 @@ const KnowledgeBase = () => {
         throw new Error('User is unauthenticated. Please log in.');
       }
 
-      const response = await fetch('http://localhost:5000/api/knowledge', {
+      const response = await fetch(apiUrl('/api/knowledge'), {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -125,7 +126,7 @@ const KnowledgeBase = () => {
       const token = localStorage.getItem('token');
       if (!token) return;
 
-      fetch('http://localhost:5000/api/knowledge', {
+      fetch(apiUrl('/api/knowledge'), {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -205,7 +206,7 @@ const KnowledgeBase = () => {
 
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5000/api/knowledge/${indexDbId}`, {
+      const response = await fetch(apiUrl(`/api/knowledge/${indexDbId}`), {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`
@@ -231,7 +232,7 @@ const KnowledgeBase = () => {
 
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5000/api/databases/${dbId}`, {
+      const response = await fetch(apiUrl(`/api/databases/${dbId}`), {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`
@@ -325,7 +326,7 @@ const KnowledgeBase = () => {
       formData.append('name', currentIndex.name);
       formData.append('file', stagedFile.rawFile);
 
-      const response = await fetch('http://localhost:5000/api/knowledge/upload', {
+      const response = await fetch(apiUrl('/api/knowledge/upload'), {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`
