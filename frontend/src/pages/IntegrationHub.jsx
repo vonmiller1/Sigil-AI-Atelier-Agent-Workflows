@@ -16,6 +16,7 @@ import {
   MessageCircle,
   X
 } from 'lucide-react';
+import { API_BASE_URL, apiUrl } from '../config/apiBase';
 
 const MOCK_WORKFLOWS = [
   {
@@ -91,7 +92,7 @@ const IntegrationHub = () => {
     try {
       setLoading(true);
       setError('');
-      const response = await fetch('http://localhost:5000/api/agents', {
+      const response = await fetch(apiUrl('/api/agents'), {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -132,7 +133,7 @@ const IntegrationHub = () => {
 
     try {
       setKeysLoading(true);
-      const response = await fetch(`http://localhost:5000/api/api-keys?entityType=${entityType}&entityId=${selectedEntityId}`, {
+      const response = await fetch(apiUrl(`/api/api-keys?entityType=${entityType}&entityId=${selectedEntityId}`), {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -225,7 +226,7 @@ const IntegrationHub = () => {
     try {
       setError('');
       setSuccess('');
-      const response = await fetch('http://localhost:5000/api/api-keys', {
+      const response = await fetch(apiUrl('/api/api-keys'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -264,7 +265,7 @@ const IntegrationHub = () => {
     try {
       setError('');
       setSuccess('');
-      const response = await fetch(`http://localhost:5000/api/api-keys/${keyId}`, {
+      const response = await fetch(apiUrl(`/api/api-keys/${keyId}`), {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`
@@ -314,7 +315,7 @@ const IntegrationHub = () => {
     // If using real API key, make streaming call
     if (widgetUseRealKey && widgetRealKey.trim() && entityType === 'agent') {
       try {
-        const response = await fetch(`http://localhost:5000/api/v1/public/agents/${selectedEntityId}/chat/stream`, {
+        const response = await fetch(apiUrl(`/api/v1/public/agents/${selectedEntityId}/chat/stream`), {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -414,7 +415,7 @@ const IntegrationHub = () => {
   // Code snippets generator
   const getCodeSnippet = () => {
     const keyPlaceholder = 'sk_live_YOUR_GENERATED_API_KEY';
-    const baseUrl = 'http://localhost:5000/api/v1/public';
+    const baseUrl = `${API_BASE_URL}/api/v1/public`;
     const id = selectedEntityId || '{entityId}';
     
     if (codeLang === 'curl') {
@@ -521,7 +522,7 @@ except Exception as e:
     return `<!-- Sigil AI Atelier Chat Widget Integration -->
 <div id="sigil-ai-atelier-chat-root"></div>
 <script
-  src="http://localhost:5000/api/v1/public/widget.js"
+  src="${API_BASE_URL}/api/v1/public/widget.js"
   data-agent-id="${id}"
   data-api-key="${keyPlaceholder}"
   async
