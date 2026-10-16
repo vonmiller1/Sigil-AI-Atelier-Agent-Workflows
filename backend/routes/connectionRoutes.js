@@ -3,6 +3,9 @@ const router = express.Router();
 const axios = require('axios');
 const User = require('../models/User');
 const { protect } = require('../middleware/authMiddleware');
+const { getPythonEngineUrl } = require('../config/serviceUrls');
+
+const PYTHON_ENGINE_URL = getPythonEngineUrl();
 
 /**
  * Mask API keys for frontend exposure
@@ -30,7 +33,7 @@ router.post('/', protect, async (req, res) => {
 
     // 1. Verify connection key by hitting Python ai_engine microservice
     try {
-      const pyResponse = await axios.post('http://localhost:8000/api/ai/models/fetch-catalog', {
+      const pyResponse = await axios.post(`${PYTHON_ENGINE_URL}/api/ai/models/fetch-catalog`, {
         provider_name: providerName,
         api_key: apiKey,
         custom_base_url: baseUrl || null
@@ -127,7 +130,7 @@ router.get('/:id/models', protect, async (req, res) => {
 
     // Call Python ai_engine microservice to fetch catalog
     try {
-      const pyResponse = await axios.post('http://localhost:8000/api/ai/models/fetch-catalog', {
+      const pyResponse = await axios.post(`${PYTHON_ENGINE_URL}/api/ai/models/fetch-catalog`, {
         provider_name: connection.providerName,
         api_key: connection.apiKey,
         custom_base_url: connection.baseUrl || null
@@ -175,7 +178,7 @@ router.post('/:id/test-model', protect, async (req, res) => {
     }
 
     try {
-      const pyResponse = await axios.post('http://localhost:8000/api/ai/models/test-model', {
+      const pyResponse = await axios.post(`${PYTHON_ENGINE_URL}/api/ai/models/test-model`, {
         provider_name: connection.providerName,
         api_key: connection.apiKey,
         custom_base_url: connection.baseUrl || null,
@@ -233,7 +236,7 @@ router.post('/:id/chat', protect, async (req, res) => {
         res.setHeader('Connection', 'keep-alive');
 
         // 3. Server-to-server POST request with responseType: 'stream'
-        const pyResponse = await axios.post('http://localhost:8000/api/engine/run', {
+        const pyResponse = await axios.post(`${PYTHON_ENGINE_URL}/api/engine/run`, {
           prompt: prompt,
           agent_config: {
             instructions: instructions || '',
@@ -264,7 +267,7 @@ router.post('/:id/chat', protect, async (req, res) => {
     } else {
       // Fallback: standard simple model completion (non-agentic/non-streaming)
       try {
-        const pyResponse = await axios.post('http://localhost:8000/api/ai/models/chat', {
+        const pyResponse = await axios.post(`${PYTHON_ENGINE_URL}/api/ai/models/chat`, {
           provider_name: connection.providerName,
           api_key: connection.apiKey,
           custom_base_url: connection.baseUrl || null,
