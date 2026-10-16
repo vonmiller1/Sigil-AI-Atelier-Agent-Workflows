@@ -9,6 +9,7 @@ import {
   Search,
   X
 } from 'lucide-react';
+import { apiUrl } from '../config/apiBase';
 
 const AgentRegistry = ({ activePage, setActivePage, activeAgent, setActiveAgent }) => {
   // Agent state lists
@@ -34,7 +35,7 @@ const AgentRegistry = ({ activePage, setActivePage, activeAgent, setActiveAgent 
 
     try {
       setLoading(true);
-      const response = await fetch('http://localhost:5000/api/agents', {
+      const response = await fetch(apiUrl('/api/agents'), {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -75,7 +76,7 @@ const AgentRegistry = ({ activePage, setActivePage, activeAgent, setActiveAgent 
     }
 
     try {
-      const response = await fetch('http://localhost:5000/api/agents', {
+      const response = await fetch(apiUrl('/api/agents'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -126,7 +127,7 @@ const AgentRegistry = ({ activePage, setActivePage, activeAgent, setActiveAgent 
     }
 
     try {
-      const response = await fetch(`http://localhost:5000/api/agents/${agentId}`, {
+      const response = await fetch(apiUrl(`/api/agents/${agentId}`), {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`
