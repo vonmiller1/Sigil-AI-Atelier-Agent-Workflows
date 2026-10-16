@@ -8,7 +8,8 @@ const User = require('../models/User');
 const DatabaseConnection = require('../models/DatabaseConnection');
 const KnowledgeBase = require('../models/KnowledgeBase');
 
-const PYTHON_ENGINE_URL = 'http://localhost:8000';
+const { getPythonEngineUrl } = require('../config/serviceUrls');
+const PYTHON_ENGINE_URL = getPythonEngineUrl();
 
 /**
  * @desc    Public streaming chat endpoint for published agents
