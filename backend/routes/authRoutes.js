@@ -8,18 +8,20 @@ const { OAuth2Client } = require('google-auth-library');
 const axios = require('axios');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
+const { getJwtSecret } = require('../utils/jwtSecret');
+const { getBackendUrl } = require('../config/serviceUrls');
 
 // User authentication routes
 router.post('/signup', registerUser);
 router.post('/login', loginUser);
 
 const getGoogleRedirectUri = () => {
-  const backendUrl = process.env.BACKEND_URL || 'http://localhost:5000';
+  const backendUrl = getBackendUrl();
   return (process.env.Gmail_REDIRECT_URI || '').replace('${BACKEND_URL}', backendUrl);
 };
 
 const getMicrosoftRedirectUri = () => {
-  const backendUrl = process.env.BACKEND_URL || 'http://localhost:5000';
+  const backendUrl = getBackendUrl();
   return (process.env.MS_REDIRECT_URI || '').replace('${BACKEND_URL}', backendUrl);
 };
 
@@ -32,7 +34,7 @@ router.get('/google', async (req, res) => {
     }
 
     try {
-      jwt.verify(token, process.env.JWT_SECRET || 'yakkay_default_jwt_secret_key_123_abc');
+      jwt.verify(token, getJwtSecret());
     } catch (err) {
       return res.status(401).send("Invalid or expired authorization token");
     }
@@ -69,7 +71,7 @@ router.get('/google/callback', async (req, res) => {
 
     let decoded;
     try {
-      decoded = jwt.verify(state, process.env.JWT_SECRET || 'yakkay_default_jwt_secret_key_123_abc');
+      decoded = jwt.verify(state, getJwtSecret());
     } catch (err) {
       return res.status(401).send("Invalid or expired OAuth state parameter (JWT verification failed)");
     }
@@ -122,7 +124,7 @@ router.get('/microsoft', async (req, res) => {
     }
 
     try {
-      jwt.verify(token, process.env.JWT_SECRET || 'yakkay_default_jwt_secret_key_123_abc');
+      jwt.verify(token, getJwtSecret());
     } catch (err) {
       return res.status(401).send("Invalid or expired authorization token");
     }
@@ -150,7 +152,7 @@ router.get('/microsoft/callback', async (req, res) => {
 
     let decoded;
     try {
-      decoded = jwt.verify(state, process.env.JWT_SECRET || 'yakkay_default_jwt_secret_key_123_abc');
+      decoded = jwt.verify(state, getJwtSecret());
     } catch (err) {
       return res.status(401).send("Invalid or expired OAuth state parameter (JWT verification failed)");
     }
