@@ -1,0 +1,64 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Fira+Code:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+/* Dynamic VS Code Theming Token Mappings */
+:root, [data-theme="default"] {
+  --bg-sidebar: #F8F9FA;
+  --bg-canvas: #F9FAFB;
+  --bg-card: #FFFFFF;
+  --text-main: #111827;
+  --text-muted: #6B7280;
+  --border-color: #E5E7EB;
+  --accent-color: #3B82F6;
+  --accent-light: #EFF6FF;
+}
+
+[data-theme="one-dark-pro"] {
+  --bg-sidebar: #1E2227;
+  --bg-canvas: #282C34;
+  --bg-card: #21252B;
+  --text-main: #ABB2BF;
+  --text-muted: #5C6370;
+  --border-color: #3E4451;
+  --accent-color: #C678DD;
+  --accent-light: #2C313C;
+}
+
+[data-theme="dracula"] {
+  --bg-sidebar: #1E1F29;
+  --bg-canvas: #282A36;
+  --bg-card: #2D2F3F;
+  --text-main: #F8F8F2;
+  --text-muted: #6272A4;
+  --border-color: #44475A;
+  --accent-color: #FF79C6;
+  --accent-light: #343746;
+}
+
+[data-theme="solarized-dark"] {
+  --bg-sidebar: #002B36;
+  --bg-canvas: #073642;
+  --bg-card: #0A3E4D;
+  --text-main: #93A1A1;
+  --text-muted: #586E75;
+  --border-color: #084D5E;
+  --accent-color: #2AA198;
+  --accent-light: #003747;
+}
+
+body {
+  margin: 0;
+  background-color: var(--bg-canvas);
+  color: var(--text-main);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+/* Custom transitions for clean CSS theming experience */
+div, header, sidebar, button, input, p, h1, h2, h3, h4, span, label {
+  transition: background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease;
+}
