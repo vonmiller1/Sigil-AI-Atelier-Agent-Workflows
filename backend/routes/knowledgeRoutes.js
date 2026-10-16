@@ -6,6 +6,9 @@ const FormData = require('form-data');
 const { v4: uuidv4 } = require('uuid');
 const KnowledgeBase = require('../models/KnowledgeBase');
 const { protect } = require('../middleware/authMiddleware');
+const { getPythonEngineUrl } = require('../config/serviceUrls');
+
+const PYTHON_ENGINE_URL = getPythonEngineUrl();
 
 // Configure multer to store uploaded files in memory
 const upload = multer({
@@ -44,7 +47,7 @@ router.post('/upload', protect, upload.single('file'), async (req, res) => {
     });
 
     try {
-      const response = await axios.post('http://localhost:8000/api/engine/knowledge/ingest', form, {
+      const response = await axios.post(`${PYTHON_ENGINE_URL}/api/engine/knowledge/ingest`, form, {
         headers: {
           ...form.getHeaders()
         },
@@ -149,7 +152,7 @@ router.delete('/:id', protect, async (req, res) => {
 
     // Call FastAPI to clean up local vector indexes and BM25 pickles
     try {
-      await axios.delete(`http://localhost:8000/api/engine/knowledge/${kb.kb_id}`, { timeout: 15000 });
+      await axios.delete(`${PYTHON_ENGINE_URL}/api/engine/knowledge/${kb.kb_id}`, { timeout: 15000 });
     } catch (err) {
       console.warn(`FastAPI index deletion cleanup failed for ${kb.kb_id}:`, err.message);
     }
