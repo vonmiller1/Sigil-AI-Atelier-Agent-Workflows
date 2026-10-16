@@ -5,7 +5,8 @@ const DatabaseConnection = require('../models/DatabaseConnection');
 const { protect } = require('../middleware/authMiddleware');
 const { encrypt } = require('../utils/cryptoUtils');
 
-const PYTHON_ENGINE_URL = 'http://localhost:8000';
+const { getPythonEngineUrl } = require('../config/serviceUrls');
+const PYTHON_ENGINE_URL = getPythonEngineUrl();
 
 /**
  * Helper to call FastAPI connection test endpoint.
