@@ -1,5 +1,6 @@
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
+const { getJwtSecret } = require('../utils/jwtSecret');
 
 /**
  * Generate a JWT token containing the user ID.
@@ -7,7 +8,7 @@ const jwt = require('jsonwebtoken');
  * @returns {string} Signed JWT.
  */
 const generateToken = (id) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET || 'yakkay_default_jwt_secret_key_123_abc', {
+  return jwt.sign({ id }, getJwtSecret(), {
     expiresIn: process.env.JWT_EXPIRE || '30d',
   });
 };
